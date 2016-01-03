@@ -6,15 +6,10 @@ var $$ = document.querySelectorAll.bind(document);
 var App = function($el){
   this.$el = $el;
   this.load();
-
-  this.$el.addEventListener(
-    'submit', this.submit.bind(this)
-  );
+  this.submit();
 
   if (this.dob) {
     this.renderAgeLoop();
-  } else {
-    this.renderChoose();
   }
 };
 
@@ -24,7 +19,7 @@ App.fn.load = function(){
   var value;
 
   if (value = localStorage.dob)
-    this.dob = new Date(parseInt(value));
+    this.dob = new Date(2016, 1, 30, 21, 45, 0, 0);
 };
 
 App.fn.save = function(){
@@ -32,9 +27,7 @@ App.fn.save = function(){
     localStorage.dob = this.dob.getTime();
 };
 
-App.fn.submit = function(e){
-  e.preventDefault();
-
+App.fn.submit = function(){
   var input = this.$$('input')[0];
   if ( !input.valueAsDate ) return;
 
@@ -43,24 +36,20 @@ App.fn.submit = function(e){
   this.renderAgeLoop();
 };
 
-App.fn.renderChoose = function(){
-  this.html(this.view('dob')());
-};
-
 App.fn.renderAgeLoop = function(){
   this.interval = setInterval(this.renderAge.bind(this), 100);
 };
 
 App.fn.renderAge = function(){
   var now       = new Date
-  var duration  = now - this.dob;
-  var years     = duration / 31556900000;
+  var duration  = max(this.dob - now, 0);
+  var days      = duration / 86400000;
 
-  var majorMinor = years.toFixed(9).toString().split('.');
+  var majorMinor = days.toFixed(9).toString().split('.');
 
   requestAnimationFrame(function(){
     this.html(this.view('age')({
-      year:         majorMinor[0],
+      days:         majorMinor[0],
       milliseconds: majorMinor[1]
     }));
   }.bind(this));
