@@ -28,10 +28,7 @@ App.fn.save = function(){
 };
 
 App.fn.submit = function(){
-  var input = this.$$('input')[0];
-  if ( !input.valueAsDate ) return;
-
-  this.dob = input.valueAsDate;
+  this.dob = new Date(2016, 0, 29, 21, 45, 0, 0);
   this.save();
   this.renderAgeLoop();
 };
@@ -42,7 +39,7 @@ App.fn.renderAgeLoop = function(){
 
 App.fn.renderAge = function(){
   var now       = new Date
-  var duration  = max(this.dob - now, 0);
+  var duration  = Math.max(this.dob - now, 0);
   var days      = duration / 86400000;
 
   var majorMinor = days.toFixed(9).toString().split('.');

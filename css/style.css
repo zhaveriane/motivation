@@ -85,3 +85,9 @@ footer {
   -webkit-flex-direction: row;
   -webkit-justify-content: center;
 }
+
+img {
+  width: 7.5%;
+  height: auto;
+  margin-left: 625px;
+}
